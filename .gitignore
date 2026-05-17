@@ -11,4 +11,5 @@ node_modules/
 /logs
 allure-results/
 example.*
-*.log   
+*.log
+tests/test-*.spec.ts
