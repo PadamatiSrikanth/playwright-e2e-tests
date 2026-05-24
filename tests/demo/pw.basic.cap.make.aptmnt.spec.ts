@@ -1,0 +1,61 @@
+import { test, expect } from '@playwright/test';
+
+test.describe('Make Appointment', () => {
+
+    test.beforeEach("Login with valid creds", async ({ page }, testInfo) => {
+
+        // 1. Launch URL and assert title and header
+        await page.goto('https://katalon-demo-cura.herokuapp.com/');
+        await expect(page).toHaveTitle("CURA Healthcare Service");
+        await expect(page.locator("//h1")).toHaveText("CURA Healthcare Service");
+
+        // 2. Click on the Make Appointment
+        await page.getByRole('link', { name: 'Make Appointment' }).click();
+        await expect(page.getByText('Please login to make')).toBeVisible();
+
+        // 3. Successful login
+        await page.getByLabel('Username').fill('John Doe');
+        await page.getByLabel('Password').fill('ThisIsNotAPassword');
+        await page.getByRole('button', { name: 'Login' }).click();
+
+        let fullPageLoginScreenShot = await page.screenshot({ fullPage: true });
+        await testInfo.attach("login page", {
+            body: fullPageLoginScreenShot,
+            contentType: 'image/png'
+        })
+
+        // 4. Assert a text
+        await expect(page.locator('h2')).toContainText('Make Appointment');
+    });
+
+    // Tests goes here
+    test('Should make an appointment with non-default values', async ({ page }) => {
+
+        // Dropdown
+        await page.getByLabel('Facility').selectOption('Hongkong CURA Healthcare Center');
+
+        // Checkbox
+        await page.getByRole('checkbox', { name: 'Apply for hospital readmission' }).check();
+
+        // Radio button
+        await page.getByRole('radio', { name: 'Medicaid' }).check();
+
+        // Date input box
+        await page.getByRole('textbox', { name: 'Visit Date (Required)' }).click();
+        await page.getByRole('textbox', { name: 'Visit Date (Required)' }).pressSequentially('05/06/2026');
+        await page.getByRole('textbox', { name: 'Visit Date (Required)' }).press('Enter');
+
+        // Multi-line comment input box
+        await page.getByRole('textbox', { name: 'Comment' }).click();
+        await page.getByRole('textbox', { name: 'Comment' }).fill('Make my appointment\ncaptured by playwright');
+
+        // Button
+        //await page.getByRole('button', { name: 'Book Appointment' }).click();
+
+        // Assertion
+        await expect(page.locator('h2')).toContainText('Appointment Confirmation');
+        await expect(page.getByRole('link', { name: 'Go to Homepage' })).toBeVisible();
+    });
+
+});
+

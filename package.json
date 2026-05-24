@@ -11,11 +11,16 @@
   "author": "Cope Automation",
   "main": "index.js",
   "scripts": {
+    "pw-basic-cap": "npx playwright test tests/demo/pw.basic.cap.make.aptmnt.spec.ts  --headed",
+    "inventory": "npx playwright test tests/functional/inventory.spec.ts  --headed",
+    "make-apt": "npx playwright test tests/functional/make.aptmnt.spec.ts  --headed",
     "login": "npx playwright test tests/functional/login.spec.ts  --headed",
     "demo": "npx playwright test tests/demo/mytest.spec.ts  --headed"
   },
   "devDependencies": {
     "@playwright/test": "^1.59.1",
-    "@types/node": "^25.6.2"
+    "@types/node": "^25.6.2",
+    "allure-playwright": "^3.8.0",
+    "allure-commandline": "^2.23.1"
   }
 }
