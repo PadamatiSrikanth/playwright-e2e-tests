@@ -1,8 +1,9 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('Make Appointment', () => {
 
-    test.beforeEach("Login with valid creds", async ({ page }, testInfo) => {
+test.describe('Make Appointment', { annotation: { type: 'Story', description: 'Azure-12345: Make Appointment Feature' }}, () => {
+
+    test.beforeEach('Login with valid creds', async ({ page }, testInfo) => {
 
         // 1. Launch URL and assert title and header
         await page.goto('https://katalon-demo-cura.herokuapp.com/');
@@ -29,7 +30,7 @@ test.describe('Make Appointment', () => {
     });
 
     // Tests goes here
-    test('Should make an appointment with non-default values', async ({ page }) => {
+    test('Should make an appointment with non-default values', { annotation: { type: "Bug", description: "Defect 1234 - It does not work on firefox" }, tag: "@smoke" }, async ({ page }) => {
 
         // Dropdown
         await page.getByLabel('Facility').selectOption('Hongkong CURA Healthcare Center');
@@ -50,7 +51,7 @@ test.describe('Make Appointment', () => {
         await page.getByRole('textbox', { name: 'Comment' }).fill('Make my appointment\ncaptured by playwright');
 
         // Button
-        //await page.getByRole('button', { name: 'Book Appointment' }).click();
+        await page.getByRole('button', { name: 'Book Appointment' }).click();
 
         // Assertion
         await expect(page.locator('h2')).toContainText('Appointment Confirmation');
